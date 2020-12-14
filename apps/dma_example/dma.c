@@ -72,8 +72,6 @@ static void init_push_DMA(void *_size, void *_dma_info)
 
 void main_ilet(claim_t claim)
 {
-  printf("Hello World\n");
-
   uintptr_t size = 256;
   char *buffer = (char *)mem_allocate(MEM_TLM_LOCAL, sizeof(char) * size);
 
