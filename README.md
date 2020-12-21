@@ -1,5 +1,7 @@
 <p align="justify">
+  
 # OctoPOS_AgentSystem3
+
 Repository to upload the monitoring interface for the OctoPOS Agent System. This project correspond to the Computer Engineering carrer TFG. The project is supervised by Ing. M.Sc. Jeferson González Gómez from Karlsruhe Institute of Technology (KIT). 
 
 The project main objective is to design a multi-agent monitoring system for OctoPOS, which improves the resources control and allocation.
