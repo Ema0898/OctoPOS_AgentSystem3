@@ -18,3 +18,6 @@ VARIANT ?= multitile
 
 BASE_DIR := ../../releases/${RELEASE}
 include ${BASE_DIR}/extras/mk/octopos-app.mk
+
+multi: 
+	make APP_INI="app.ini ../drr-demo/app.ini"

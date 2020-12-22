@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -20,6 +21,8 @@ int main()
   example_t temp = adios();
 
   hola(temp);
+
+  free(temp);
 
   return 0;
 }

@@ -9,13 +9,13 @@
 #define PE_TYPE 0 // "RISC type PE"
 #define DOWNEY_A 20000
 #define DOWNEY_SIGMA 20
-#define MIN_PE 2         // minimum required PE
-#define MAX_PE 64        // maximum required PE
+#define MIN_PE 1         // minimum required PE
+#define MAX_PE 8         // maximum required PE
 #define TILE_BIT_MASK 15 // 000...1111 - Invade on 4 tiles
 
 void HelloWorldILet(void *parm)
 {
-    printf("Hello World from iLet on tile %u running on cpu %u with parameter %p\n", get_tile_id(), get_cpu_id(), parm);
+    printf("Hello World from iLet on tile %u running on cpu %u with parameter %p agent example 1\n", get_tile_id(), get_cpu_id(), parm);
 }
 
 void main_ilet(claim_t claim)
@@ -35,7 +35,14 @@ void main_ilet(claim_t claim)
     agent_constr_set_quantity(newConstr, MIN_PE, MAX_PE, PE_TYPE);
     // Allows invasion on 4 tiles (bit map: 000...1111)
     agent_constr_set_tile_bitmap(newConstr, TILE_BIT_MASK);
+
+    //agent_constr_set_tile_shareable(newConstr, 1);
+    //agent_constr_set_stickyclaim(newConstr, 0);
+
+    //agent_constr_set_notontile(newConstr, 1);
     // Reinvades claim with updated constraints
+    //agent_constr_set_appnumber(newConstr, 1);
+
     agent_claim_reinvade_constraints(initialClaim, newConstr);
     if (initialClaim == NULL)
     {
@@ -43,11 +50,13 @@ void main_ilet(claim_t claim)
         shutdown(0);
     }
 
+    printf("TILE COUNT = %d agent example 1\n", agent_claim_get_tilecount(initialClaim));
+
     for (int tile = 0; tile < get_tile_count(); tile++)
     {
         // Get available PEs
         int pes = agent_claim_get_pecount_tile_type(initialClaim, tile, PE_TYPE);
-        printf("Tile %d, PE's %d \n", tile, pes);
+        printf("Tile %d, PE's %d agent example 1\n", tile, pes);
 
         // If there are available PEs in this tile's claim.
         if (pes != 0)
@@ -66,7 +75,7 @@ void main_ilet(claim_t claim)
                 simple_ilet_init(&ILet[iletnr], HelloWorldILet, NULL);
             }
             // Infect claim with Ilet team.
-            printf("Infecting %d Ilets on Tile %d\n", pes, tile);
+            printf("Infecting %d Ilets on Tile %d agent example 1\n", pes, tile);
             proxy_infect(pClaim, ILet, pes);
         }
     }
