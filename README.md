@@ -51,6 +51,17 @@ This is the Agent System second version, it uses a distributive approach. Curren
 
 To enable this, follow the previous steps until you reach the 'Os configuration' main menu. Go to the 'Resource Allocation and Accounting' and press the space bar in the 'Use one SystemClaim per tile for system services' option, exit this menu. Go to the 'Agent System' menu and press the space bar in the 'Enable Agent System 2.0 Support', enable all the new option  by pressing the space bar. Finally exit the menu and save the file, as you did in the Agent System 1.0 configuration.
 
+#### Agent System 3.0
+This is the Agent System third version, at this moment, it uses the Agent System 1.0 as a base and implements a monitoring interface over it.
+
+To enable this, first you need to replace some files. The following list shows the files you need to replace and its corresponding routes in the irtss folder.
+* /os/src/octo_agent3.h and os/src/octo_agent3.cc from this repository goes to the irtss/src/os/krn/cface route.
+* /os/src/agent3/* from this repository  goes to the irtss/src/os route.
+* /os/kconf/octoPOS.fm from this repository goes to the irtss irtss/kconf/common/features route. You need to replace the old file with the new one.
+* /os/kconf/octoPOS.cmp.pl from this repository goes to the irtss irtss/kconf/common/family. You need to replace the old file with the new one.
+
+Finally, to enable this Agent System, you need to follow the same steps described in the Agent System 1.0 section. You need to select the 'Enable Agent System 3.0 Support', 'Agent 3.0 Implementation' and 'Heterogeneous RPC-client implementation' options.
+
 ### 4 - Compile the System
 Go to the repository root directory and run the following command:
 ```
