@@ -4,19 +4,21 @@
 #include "os/rpc/RPCStub.h"
 #include "os/agent3/AgentRPCImpl.h" //TODO: remove?
 
+#include <stdio.h>
+
 /*
 REMARK: [VW] This code will be executed on all tiles (io and non io) on the guest layer
 */
 
 // JK: Added for Telemetry Functionality
 #ifdef cf_gui_enabled
-#include "os/agent/MetricSender.h"
-#include "os/agent/Metric.h"
-#include "os/agent/MetricNewAgent.h"
-#include "os/agent/MetricDeletedAgent.h"
-#include "os/agent/MetricAgentInvade.h"
-#include "os/agent/MetricAgentRetreat.h"
-#include "os/agent/MetricAgentRename.h"
+#include "os/agent3/MetricSender.h"
+#include "os/agent3/Metric.h"
+#include "os/agent3/MetricNewAgent.h"
+#include "os/agent3/MetricDeletedAgent.h"
+#include "os/agent3/MetricAgentInvade.h"
+#include "os/agent3/MetricAgentRetreat.h"
+#include "os/agent3/MetricAgentRename.h"
 #endif
 
 os::agent::AgentInstance *os::agent::Agent::createAgent()
@@ -32,7 +34,8 @@ os::agent::AgentInstance *os::agent::Agent::createAgent()
 /* --- JK: Telemetry Begin---*/
 #ifdef cf_gui_enabled
 		AgentInstance *newlyCreatedAgent = (AgentInstance *)future.getData();
-		MetricNewAgent m((int)newlyCreatedAgent);
+		const uint8_t id = newlyCreatedAgent->get_id();
+		MetricNewAgent m(id);
 		MetricSender::measureMetric(m);
 #endif
 		/* --- JK Telemetry End ---*/
@@ -50,7 +53,8 @@ os::agent::AgentInstance *os::agent::Agent::createAgent()
 		AgentInstance *newlyCreatedAgent = (AgentInstance *)future.getData();
 		if (newlyCreatedAgent)
 		{
-			MetricNewAgent m((int)newlyCreatedAgent);
+			const uint8_t id = newlyCreatedAgent->get_id();
+			MetricNewAgent m(id);
 			MetricSender::measureMetric(m);
 		}
 #endif
@@ -67,7 +71,7 @@ void os::agent::Agent::deleteAgent(os::agent::AgentInstance *ag, bool force)
 // JK: Remember the ID of the Agent here so that we can monitor it.
 // After all, the Agent will be deleted within this method call graph..
 #ifdef cf_gui_enabled
-	int idOfAgentToDelete = (int)ag;
+	const uint8_t id = ag->get_id();
 #endif
 	if (hw::hal::Tile::getTileID() == os::agent::AgentSystem::AGENT_TILE)
 	{
@@ -85,7 +89,7 @@ void os::agent::Agent::deleteAgent(os::agent::AgentInstance *ag, bool force)
 	}
 /* --- JK: Telemetry DELETE AGENT---*/
 #ifdef cf_gui_enabled
-	MetricDeletedAgent m(idOfAgentToDelete);
+	MetricDeletedAgent m(id);
 	MetricSender::measureMetric(m);
 #endif
 	/* --- JK Telemetry End ---*/
@@ -316,7 +320,7 @@ bool os::agent::Agent::pure_retreat(os::agent::AgentInstance *ag, uint32_t claim
 	DBG(SUB_AGENT, "os::agent::Agent::pure_retreat(%p)\n", ag);
 // JK: Remember the ID of the Agent here so that we can monitor it.
 #ifdef cf_gui_enabled
-	int agentId = (int)ag;
+	int agent_id = ag->get_id();
 #endif
 	PureRetreatAgentRPC::FType future;
 	if (hw::hal::Tile::getTileID() == os::agent::AgentSystem::AGENT_TILE)
@@ -332,7 +336,7 @@ bool os::agent::Agent::pure_retreat(os::agent::AgentInstance *ag, uint32_t claim
 	}
 	/* --- JK: Telemetry for RETREAT---*/
 #ifdef cf_gui_enabled
-	MetricAgentRetreat m(claim_no, agentId);
+	MetricAgentRetreat m(claim_no, agent_id);
 	MetricSender::measureMetric(m);
 #endif
 	/* --- JK Telemetry End ---*/
@@ -385,7 +389,8 @@ void os::agent::Agent::setAgentName(os::agent::AgentInstance *ag, const char *ag
 		Name change reaches GUI before program ends.
 	*/
 #ifdef cf_gui_enabled
-	MetricAgentRename m((int)ag, agent_name);
+	uint8_t id = ag->get_id();
+	MetricAgentRename m(id, agent_name);
 	MetricSender::measureMetric(m);
 #endif
 	/* -- Telemetry end -- */
