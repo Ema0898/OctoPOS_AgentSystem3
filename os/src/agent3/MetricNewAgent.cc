@@ -6,34 +6,31 @@
 
 void os::agent::MetricNewAgent::init()
 {
-    timestamp = clock(); // clock() gives back macroseconds since system startup
+  timestamp = clock(); // clock() gives back macroseconds since system startup
 }
 
 os::agent::MetricNewAgent::MetricNewAgent()
 {
-    init();
+  init();
 }
 
-os::agent::MetricNewAgent::MetricNewAgent(int agentId)
+os::agent::MetricNewAgent::MetricNewAgent(uint8_t agentId)
 {
-    init();
-    this->agentId = agentId;
+  init();
+  this->agentId = agentId;
 }
 
 char *os::agent::MetricNewAgent::package()
 {
-    char *buffer = (char *)os::agent::AgentMemory::agent_mem_allocate(getPackageSize());
-    if (buffer == nullptr)
-    {
-        panic("agent_mem_allocate failed");
-    }
+  char *buffer = (char *)os::agent::AgentMemory::agent_mem_allocate(getPackageSize());
+  if (buffer == nullptr)
+  {
+    panic("agent_mem_allocate failed");
+  }
 
-    int payloadSize = 1 * sizeof(int32_t);
-    int payloadStartIndex = packageHelper(buffer, metricId, timestamp, payloadSize);
+  uint8_t offset1 = flatten(metricId, buffer, 0);
+  uint8_t offset2 = flatten(agentId, buffer, offset1 + 1);
+  buffer[offset1 + offset2 + 1] = '\0';
 
-    // Actual Payload unique to the "New Agent Metric" - here, it is the AgentID
-    //buffer[payloadStartIndex] = agentId;
-    flatten(agentId, buffer, payloadStartIndex);
-
-    return buffer;
+  return buffer;
 }

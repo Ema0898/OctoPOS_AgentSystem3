@@ -12,10 +12,10 @@ namespace os
         {
         public:
             MetricNewAgent();
-            MetricNewAgent(int agentId);
+            MetricNewAgent(uint8_t agentId);
             char *package();
 
-            int agentId;
+            uint8_t agentId;
 
         private:
             void init();

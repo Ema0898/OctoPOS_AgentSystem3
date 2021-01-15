@@ -13,10 +13,10 @@ namespace os
 		{
 		public:
 			MetricAgentRename();
-			MetricAgentRename(int id, const char *name);
+			MetricAgentRename(uint8_t id, const char *name);
 			char *package();
 
-			int agentId;
+			uint8_t agentId;
 			char newName[os::agent::AgentInstance::maxNameLength];
 
 		private:

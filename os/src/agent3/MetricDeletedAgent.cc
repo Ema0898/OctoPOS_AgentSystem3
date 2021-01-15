@@ -6,32 +6,31 @@
 
 void os::agent::MetricDeletedAgent::init()
 {
-    timestamp = clock();
+  timestamp = clock();
 }
 
 os::agent::MetricDeletedAgent::MetricDeletedAgent()
 {
-    init();
+  init();
 }
 
-os::agent::MetricDeletedAgent::MetricDeletedAgent(int agentId)
+os::agent::MetricDeletedAgent::MetricDeletedAgent(uint8_t agentId)
 {
-    init();
-    agentId = agentId;
+  init();
+  this->agentId = agentId;
 }
 
 char *os::agent::MetricDeletedAgent::package()
 {
-    char *buffer = (char *)os::agent::AgentMemory::agent_mem_allocate(getPackageSize());
-    if (buffer == nullptr)
-    {
-        panic("agent_mem_allocate failed");
-    }
+  char *buffer = (char *)os::agent::AgentMemory::agent_mem_allocate(getPackageSize());
+  if (buffer == nullptr)
+  {
+    panic("agent_mem_allocate failed");
+  }
 
-    int payloadSize = 1 * sizeof(int32_t);
-    int payloadStartIndex = packageHelper(buffer, metricId, timestamp, payloadSize);
+  uint8_t offset1 = flatten(metricId, buffer, 0);
+  uint8_t offset2 = flatten(agentId, buffer, offset1 + 1);
+  buffer[offset1 + offset2 + 1] = '\0';
 
-    flatten(agentId, buffer, payloadStartIndex);
-
-    return buffer;
+  return buffer;
 }

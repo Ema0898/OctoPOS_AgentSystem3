@@ -6,34 +6,33 @@
 
 void os::agent::MetricAgentRetreat::init()
 {
-    timestamp = clock(); // clock() gives back macroseconds since system startup
+  timestamp = clock(); // clock() gives back macroseconds since system startup
 }
 
 os::agent::MetricAgentRetreat::MetricAgentRetreat()
 {
-    init();
+  init();
 }
 
 os::agent::MetricAgentRetreat::MetricAgentRetreat(int claimId, int agentId)
 {
-    init();
-    this->claimId = claimId;
-    this->agentId = agentId;
+  init();
+  this->claimId = claimId;
+  this->agentId = agentId;
 }
 
 char *os::agent::MetricAgentRetreat::package()
 {
-    char *buffer = (char *)os::agent::AgentMemory::agent_mem_allocate(getPackageSize());
-    if (buffer == nullptr)
-    {
-        panic("agent_mem_allocate failed");
-    }
+  char *buffer = (char *)os::agent::AgentMemory::agent_mem_allocate(getPackageSize());
+  if (buffer == nullptr)
+  {
+    panic("agent_mem_allocate failed");
+  }
 
-    int payloadSize = 2 * sizeof(uintptr_t);
-    int payloadStartIndex = packageHelper(buffer, metricId, timestamp, payloadSize);
+  uint8_t offset1 = flatten(metricId, buffer, 0);
+  uint8_t offset2 = flatten(claimId, buffer, offset1 + 1);
+  uint8_t offset3 = flatten(agentId, buffer, offset1 + offset2 + 2);
+  buffer[offset1 + offset2 + offset3 + 2] = '\0';
 
-    flatten(claimId, buffer, payloadStartIndex);
-    flatten(agentId, buffer, payloadStartIndex + sizeof(int));
-
-    return buffer;
+  return buffer;
 }

@@ -2,7 +2,7 @@
 #define METRIC_SENDER_H
 
 #include "lib/adt/SimpleSpinlock.h"
-#include <octo_eth.h>
+//#include <octo_eth.h>
 #include "os/agent3/Metric.h"
 
 namespace os
@@ -31,7 +31,7 @@ namespace os
 
             static int writeChannelNo;
             static int writeChannelTransportMode;
-            static eth_channel_t writeChannel;
+            //static eth_channel_t writeChannel;
 
             static bool isEthernetInitialized;
             static lib::adt::SimpleSpinlock lockEthernetInit;

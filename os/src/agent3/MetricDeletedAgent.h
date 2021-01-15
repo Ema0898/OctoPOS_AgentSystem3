@@ -12,10 +12,10 @@ namespace os
         {
         public:
             MetricDeletedAgent();
-            MetricDeletedAgent(int agentId);
+            MetricDeletedAgent(uint8_t agentId);
             char *package();
 
-            int agentId;
+            uint8_t agentId;
 
         private:
             void init();

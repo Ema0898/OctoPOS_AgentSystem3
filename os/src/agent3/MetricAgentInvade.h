@@ -22,7 +22,7 @@ namespace os
             int isInitialClaim; // Interpreted as Bool, but for transport
                                 // uniform use of Integers is convenient
                                 //hw::hal::Tile::MAX_TILE_COUNT
-            uintptr_t resourceMaps[hw::hal::Tile::MAX_TILE_COUNT];
+            int resourceMaps[hw::hal::Tile::MAX_TILE_COUNT];
 
         private:
             void init();
