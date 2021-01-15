@@ -2,7 +2,7 @@
   
 # OctoPOS_AgentSystem3
 
-Repository to upload the monitoring interface for the OctoPOS Agent System. This project correspond to the Computer Engineering carrer TFG. The project is supervised by Ing. M.Sc. Jeferson González Gómez from Karlsruhe Institute of Technology (KIT). 
+Repository to upload the monitoring interface for the OctoPOS Agent System. This project corresponds to the Computer Engineering carrer TFG. The project is supervised by Ing. M.Sc. Jeferson González Gómez from Karlsruhe Institute of Technology (KIT). 
 
 The project main objective is to design a multi-agent monitoring system for OctoPOS, which improves the resources control and allocation.
 
@@ -22,7 +22,7 @@ sudo cp aspect++/usr/bin/* /usr/bin
 ```
 
 ## Compile the OS
-### 1 - Clone the repo
+### 1 - Clone the repository
 First, you need to have access to the invasic IRTSS repo. When you have the access, clone the repository with the following command:
 ```
 git clone https://gitlab.cs.fau.de/invasic/irtss.git
@@ -33,7 +33,7 @@ Before compile the system, you need to add a submodule which is needed for the c
 
 ### 3 - Enable the Agent System
 #### Agent System 1.0
-This is the stable version. It allows you to use the Agent System but, it uses a centralized approach. To enable it, go to the irtss/app/release.x64native.multitile route. Then run the following command:
+This is the stable version. It allows you to use the Agent System, but it uses a centralized approach. To enable it, go to the irtss/app/release.x64native.multitile route. Then, run the following command:
 ```
 make menuconfig
 ```
@@ -49,7 +49,7 @@ After that, go to the OS configuration/Agent System and press the space bar in t
 #### Agent System 2.0
 This is the Agent System second version, it uses a distributive approach. Currently, this version gives errors in the compilation process.
 
-To enable this, follow the previous steps until you reach the 'Os configuration' main menu. Go to the 'Resource Allocation and Accounting' and press the space bar in the 'Use one SystemClaim per tile for system services' option, exit this menu. Go to the 'Agent System' menu and press the space bar in the 'Enable Agent System 2.0 Support', enable all the new option  by pressing the space bar. Finally exit the menu and save the file, as you did in the Agent System 1.0 configuration.
+To enable this, follow the previous steps until you reach the 'Os configuration' main menu. Go to the 'Resource Allocation and Accounting' and press the space bar in the 'Use one SystemClaim per tile for system services' option, exit this menu. Go to the 'Agent System' menu and press the space bar in the 'Enable Agent System 2.0 Support', enable all the new option  by pressing the space bar. Finally, exit the menu and save the file, as you did in the Agent System 1.0 configuration.
 
 #### Agent System 3.0
 This is the Agent System third version, at this moment, it uses the Agent System 1.0 as a base and implements a monitoring interface over it.
