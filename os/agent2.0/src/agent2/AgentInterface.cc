@@ -41,8 +41,6 @@ CI<Agent> *AgentInterface::create_agent(TID tid)
 	{
 		a = new Agent;
 
-		//AgentMetrics::init_metrics(a);
-		//CI<Agent> new_agent_ci = a->get_CI();
 		ci->set_TileID(a->get_CI()->get_TileID());
 		ci->set_instance_identifier(a->get_CI()->get_instance_identifier());
 
@@ -136,8 +134,6 @@ CI<AgentClaim> *AgentInterface::_invade_agent(CI<Agent> *agent_ci, Serialization
 	*ci = fut.getData();
 
 	ClaimID claim_id = ci->get_instance_identifier();
-	// Agent *ag = LocalAgentTileManager->get_agent(aid);
-	// AgentClaim ac = ci->get_instance_identifier();
 	AgentMetrics::invade_agent(&aid, &claim_id);
 
 	return ci;

@@ -4,7 +4,7 @@
 #include "AgentID.h"
 #include "AgentClaim.h"
 
-#include <stdarg.h>
+/* Class to print system metrics */
 
 namespace os
 {
