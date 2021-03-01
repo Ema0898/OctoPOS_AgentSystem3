@@ -17,6 +17,8 @@ namespace os
             static void delete_agent(AgentID *agent_id);
             static void invade_agent(AgentID *agent_id, ClaimID *claim_id);
             static void retreat_agent(AgentID *agent_id, ClaimID *claim_id);
+            //static void new_cluster(TID *tile_id, bool *is_active);
+            static void new_cluster(void *tile_id);
             static void print_metrics();
         };
     } // namespace agent2
