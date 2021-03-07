@@ -2,20 +2,21 @@
  * Project Untitled
  */
 
-#include <octo_dispatch_claim.h>
-#include "os/res/DispatchClaim.h"
-#include "os/proc/iLet.h"
 #include "AgentClusterManager.h"
 #include "Agent2.h"
 #include "lib/debug.h"
 #include "os/rpc/RPCStub.h"
 #include "AgentMemory.h"
+#include "hw/hal/Atomic.h"
+
 #include "AgentMetrics.h"
+
+#include <stdio.h>
 
 using namespace os::agent2;
 AgentClusterManager *LocalAgentClusterManager = nullptr;
 
-void reply(void *a);
+int hola = 0;
 
 AgentClusterManager::AgentClusterManager(void) : m_TileID(hw::hal::Tile::getTileID()), m_is_active(is_running_on_a_cluster_Tile())
 {
@@ -23,30 +24,11 @@ AgentClusterManager::AgentClusterManager(void) : m_TileID(hw::hal::Tile::getTile
 	m_is_active = is_running_on_a_cluster_Tile();
 	DBG_RAW(SUB_AGENT, "AgentClusterManager was started on Tile %d. it is marked  as %s\n", m_TileID, m_is_active ? "[ACTIVE]" : "[NOT ACTIVE]");
 
-	if (m_TileID != 0)
-	{
-		// simple_ilet ilet;
-		// simple_ilet_init(&ilet, (func_t)reply, (void *)&m_TileID);
-		//AgentMetrics::new_cluster((void *)&m_TileID);
-		// printf("DISPATCH CLAIM = %d\n", get_own_dispatch_claim());
-		// printf("PARENT DISPATCH CLAIM = %d\n", get_parent_dispatch_claim());
-		//dispatch_claim_send_reply(&ilet);
-		// infect_self_single(&ilet);
-		// printf("@@@@@@@@@@ ILET ES %s @@@@@@@@\n", &ilet == NULL ? "NULO" : "NO NULO");
-		proc::iLet myilet;
-		myilet.init(reply, (void *)&m_TileID);
+	// hw::hal::Atomic::addFetch(&hola, 1);
 
-		res::DispatchClaim claim;
-		claim.sendReply(myilet);
-	}
-	else
-	{	//AgentMetrics::new_cluster(&m_TileID, &m_is_active);
-		//AgentMetrics::new_cluster((void *)&m_TileID);
-		// int a = 34;
-		// reply((void *)&a);
-		// printf("DISPATCH CLAIM = %d\n", get_own_dispatch_claim());
-		// printf("PARENT DISPATCH CLAIM = %d\n", get_parent_dispatch_claim());
-	}
+	// printf("****** HOLA = %d *******\n", hola);
+
+	AgentMetrics::new_cluster();
 }
 
 AgentClusterManager::~AgentClusterManager()
@@ -154,9 +136,4 @@ bool AgentClusterManager::is_AgentClusterManager(TID TileID)
 			break;
 	}
 	return (true);
-}
-
-void reply(void *a)
-{
-	printf("Hello from AgentClusterManager replay in tile %d\n", hw::hal::Tile::getTileID());
 }

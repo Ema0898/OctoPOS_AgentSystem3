@@ -110,8 +110,6 @@ namespace os
 	 */
 			unsigned int get_landlord_Agents(unsigned int max_nr_of_agents, void *target_address);
 
-			// static void reply(void *a);
-
 		private:
 			TID m_TileID;							 ///< The TileID of the Tile this AgentClusterManager instance is running on
 			bool m_is_active;						 ///< saves the state whether or not the current instance of the AgentClusterManager is running on a cluster tile
