@@ -50,7 +50,15 @@ namespace os
 
 			static void print_proxy_claims(CI<Agent> *agent_ci);
 
-			static void print_metrics_interface();
+			static void print_metrics_interface(uint8_t options);
+
+			static void enable_metrics_interface();
+
+			static uint64_t metrics_timer_start_interface();
+
+			static uint64_t metrics_timer_stop_interface();
+
+			static void metrics_timer_init_interface();
 
 		private:
 			static void _print_claim(CI<Agent> *agent_ci, ClaimID claim_id);
@@ -86,7 +94,7 @@ namespace os
 			//	static bool _migrate_agent(CI<Agent> *agent_ci, TID dest);
 		};
 
-	} // namespace agent2
-} // namespace os
+	} //agent2
+} //os
 
 #endif // OS_AGENT2_AGENTINTERFACE_H

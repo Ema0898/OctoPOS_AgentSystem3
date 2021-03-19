@@ -4,6 +4,7 @@
 #include "CommInterface.h"
 #include "config.h"
 #include "AgentMetrics.h"
+#include "AgentMetricsPrinter.h"
 
 #ifdef cf_gui_enabled
 #include "os/dev/HWInfo.h"
@@ -16,7 +17,6 @@ static bool initMetric = false;
 #endif
 
 using namespace os::agent2;
-extern AgentTileManager *LocalAgentTileManager;
 
 #ifdef cf_gui_enabled
 static inline void _init_metric()
@@ -40,12 +40,15 @@ CI<Agent> *AgentInterface::create_agent(TID tid)
 	if (tid == hw::hal::Tile::getTileID())
 	{
 		a = new Agent;
-
+		//CI<Agent> new_agent_ci = a->get_CI();
 		ci->set_TileID(a->get_CI()->get_TileID());
 		ci->set_instance_identifier(a->get_CI()->get_instance_identifier());
 
+#ifdef cf_agent2_metrics_custom
 		AgentID aid = ci->get_instance_identifier();
-		AgentMetrics::new_agent(&aid);
+		AgentMetrics::new_agent(aid);
+#endif
+
 #ifdef cf_gui_enabled
 		if (!initMetric)
 		{
@@ -71,10 +74,11 @@ CI<Agent> *AgentInterface::create_agent(TID tid)
 
 void AgentInterface::_delete_agent(CI<Agent> *agent_ci, bool force)
 {
-
 	AgentID aid = agent_ci->get_instance_identifier();
 
-	AgentMetrics::delete_agent(&aid);
+#ifdef cf_agent2_metrics_custom
+	AgentMetrics::delete_agent(aid);
+#endif
 
 	TID tid = agent_ci->get_TileID();
 	DeleteAgentMANRPC_DMA::FType fut;
@@ -133,8 +137,10 @@ CI<AgentClaim> *AgentInterface::_invade_agent(CI<Agent> *agent_ci, Serialization
 	CI<AgentClaim> *ci = new CI<AgentClaim>;
 	*ci = fut.getData();
 
+#ifdef cf_agent2_metrics_custom
 	ClaimID claim_id = ci->get_instance_identifier();
-	AgentMetrics::invade_agent(&aid, &claim_id);
+	AgentMetrics::invade_agent(aid, claim_id);
+#endif
 
 	return ci;
 }
@@ -194,7 +200,9 @@ void AgentInterface::_retreat_claim(CI<Agent> *agent_ci, ClaimID claim_id)
 {
 	AgentID aid = agent_ci->get_instance_identifier();
 
-	AgentMetrics::retreat_agent(&aid, &claim_id);
+#ifdef cf_agent2_metrics_custom
+	AgentMetrics::retreat_agent(aid, claim_id);
+#endif
 
 	TID tid = agent_ci->get_TileID();
 	RetreatClaimMANRPC_DMA::FType fut;
@@ -314,12 +322,31 @@ void AgentInterface::_release_proxy_claim(CI<Agent> *agent_ci, ClaimID claim_id,
 	fut.force();
 }
 
-void AgentInterface::print_metrics_interface()
+void AgentInterface::print_metrics_interface(uint8_t options)
 {
-	AgentMetrics::print_metrics();
+	AgentMetrics::print_metrics(options);
 }
 
-//
+void AgentInterface::enable_metrics_interface()
+{
+	AgentMetricsPrinter::enable_metrics();
+}
+
+void AgentInterface::metrics_timer_init_interface()
+{
+	AgentMetrics::metrics_timer_init();
+}
+
+uint64_t AgentInterface::metrics_timer_start_interface()
+{
+	return AgentMetrics::metrics_timer_start();
+}
+
+uint64_t AgentInterface::metrics_timer_stop_interface()
+{
+	return AgentMetrics::metrics_timer_stop();
+}
+
 // bool AgentInterface::_migrate_agent(CI<Agent> *agent_ci, TID dest){
 // 	AgentID aid = agent_ci->get_instance_identifier();
 // 	TID tid = agent_ci->get_TileID();

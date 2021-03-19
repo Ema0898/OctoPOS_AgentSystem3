@@ -7,8 +7,6 @@
 #include "lib/debug.h"
 #include "os/rpc/RPCStub.h"
 #include "AgentMemory.h"
-#include "hw/hal/Atomic.h"
-
 #include "AgentMetrics.h"
 
 #include <stdio.h>
@@ -16,19 +14,14 @@
 using namespace os::agent2;
 AgentClusterManager *LocalAgentClusterManager = nullptr;
 
-int hola = 0;
-
 AgentClusterManager::AgentClusterManager(void) : m_TileID(hw::hal::Tile::getTileID()), m_is_active(is_running_on_a_cluster_Tile())
 {
 	m_TileID = hw::hal::Tile::getTileID();
 	m_is_active = is_running_on_a_cluster_Tile();
 	DBG_RAW(SUB_AGENT, "AgentClusterManager was started on Tile %d. it is marked  as %s\n", m_TileID, m_is_active ? "[ACTIVE]" : "[NOT ACTIVE]");
 
-	// hw::hal::Atomic::addFetch(&hola, 1);
-
-	// printf("****** HOLA = %d *******\n", hola);
-
 	AgentMetrics::new_cluster();
+	printf("#### AgentClusterStarted on tile %d ####\n", hw::hal::Tile::getTileID());
 }
 
 AgentClusterManager::~AgentClusterManager()
