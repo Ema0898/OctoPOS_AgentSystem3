@@ -16,11 +16,10 @@ using namespace os::agent2;
 SerializationBuffer AgentMetrics::metric_buffer; /* Buffer to store the metrics */
 uint32_t AgentMetrics::buffer_size;              /* Keep track of the buffer size */
 int AgentMetrics::clusters;
+uint64_t AgentMetrics::start_timer;
+uint64_t AgentMetrics::stop_timer;
 
 lib::adt::SimpleSpinlock locker;
-
-uint64_t start_timer;
-uint64_t stop_timer;
 
 /* New agent is created. Stores the agent id in the buffer */
 void AgentMetrics::new_agent(const AgentID &agent_id)
@@ -104,7 +103,14 @@ uint64_t AgentMetrics::metrics_timer_stop()
 /* Prints the data which is inside the buffer. */
 void AgentMetrics::print_metrics(uint8_t &options)
 {
-  uint64_t time = stop_timer - start_timer;
+  uint64_t time;
+
+  if (start_timer <= 0 || stop_timer <= 0)
+  {
+    time = -1;
+  }
+
+  time = stop_timer - start_timer;
 
   AgentMetricsPrinter::basic_print(metric_buffer, buffer_size, options, clusters, time);
 }

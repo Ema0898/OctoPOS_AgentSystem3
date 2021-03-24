@@ -18,6 +18,8 @@ namespace os
             static int clusters;
             static uint32_t buffer_size;
             static SerializationBuffer metric_buffer;
+            static uint64_t start_timer;
+            static uint64_t stop_timer;
 
         public:
             static void new_agent(const AgentID &agent_id);

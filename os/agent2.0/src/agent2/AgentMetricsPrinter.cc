@@ -64,6 +64,16 @@ void AgentMetricsPrinter::basic_print(SerializationBuffer &metric_buffer, uint32
 
   printf("------------------------------------------\n");
   printf("Started clusters %d \n", clusters);
-  printf("Execution Time %d \n", time);
+
+  if (time < -1)
+  {
+    printf("Invalid Execution Time\n");
+  }
+  else
+  {
+    printf("Execution Time %d \n", time);
+  }
+
+  printf("Float Print Test in OS %.3f \n", 1.12 + 3.45);
   printf("------------------------------------------\n");
 }
