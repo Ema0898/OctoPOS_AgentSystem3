@@ -524,12 +524,12 @@ void enable_metrics()
     AgentInterface::enable_metrics_interface();
 }  
 
-int metrics_timer_start()
+uint64_t metrics_timer_start()
 {
     return AgentInterface::metrics_timer_start_interface();
 }
 
-int metrics_timer_stop()
+uint64_t metrics_timer_stop()
 {
     return AgentInterface::metrics_timer_stop_interface();
 }

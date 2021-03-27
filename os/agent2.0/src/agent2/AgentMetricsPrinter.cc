@@ -1,5 +1,6 @@
 #include "AgentMetricsPrinter.h"
 #include "MetricsEnum.h"
+#include "hw/dev/TSCDeadlineTimer.h"
 
 #include <stdio.h>
 
@@ -12,7 +13,7 @@ void AgentMetricsPrinter::enable_metrics()
   enabled = 1;
 }
 
-void AgentMetricsPrinter::basic_print(SerializationBuffer &metric_buffer, uint32_t &buffer_size, uint8_t &options, const int &clusters, const int &time)
+void AgentMetricsPrinter::basic_print(SerializationBuffer &metric_buffer, uint32_t &buffer_size, uint8_t &options, const int &clusters, const uint64_t &time)
 {
 
   if (!enabled)
@@ -64,16 +65,6 @@ void AgentMetricsPrinter::basic_print(SerializationBuffer &metric_buffer, uint32
 
   printf("------------------------------------------\n");
   printf("Started clusters %d \n", clusters);
-
-  if (time < -1)
-  {
-    printf("Invalid Execution Time\n");
-  }
-  else
-  {
-    printf("Execution Time %d \n", time);
-  }
-
-  printf("Float Print Test in OS %.3f \n", 1.12 + 3.45);
+  printf("Execution Time %ld cycles\n", time);
   printf("------------------------------------------\n");
 }

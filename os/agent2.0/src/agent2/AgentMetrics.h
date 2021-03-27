@@ -26,7 +26,7 @@ namespace os
             static void delete_agent(const AgentID &agent_id);
             static void invade_agent(const AgentID &agent_id, const ClaimID &claim_id);
             static void retreat_agent(const AgentID &agent_id, const ClaimID &claim_id);
-            static void new_cluster();
+            static void new_cluster(int tile);
             static void metrics_timer_init();
             static uint64_t metrics_timer_start();
             static uint64_t metrics_timer_stop();

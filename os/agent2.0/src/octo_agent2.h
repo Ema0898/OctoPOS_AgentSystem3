@@ -546,8 +546,8 @@ proxy_claim_t get_proxy_test();
 
 void print_metrics(uint8_t options);
 void enable_metrics();
-int metrics_timer_start();
-int metrics_timer_stop();
+uint64_t metrics_timer_start();
+uint64_t metrics_timer_stop();
 void metrics_timer_init();
 
 #ifdef __cplusplus
