@@ -510,13 +510,10 @@ agentclaim_t agent_claim_get_initial(claim_t octoclaim) {
 	return agent_claim_invade(NULL, constr);
 }
 
+#ifdef cf_agent2_metrics_custom
 void print_metrics(uint8_t options)
 {
 	AgentInterface::print_metrics_interface(options);
-    
-// #ifndef cf_gui_enabled
-// 	printf("^^^^^^ AMATERASU ^^^^^^");
-// #endif
 }
 
 void enable_metrics()
@@ -538,3 +535,5 @@ void metrics_timer_init()
 {
     return AgentInterface::metrics_timer_init_interface();
 }
+
+#endif

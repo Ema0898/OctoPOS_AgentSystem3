@@ -544,11 +544,13 @@ void agent_print_proxy_claims(agent_t agent);
 void agent_print_system_resources(void);
 proxy_claim_t get_proxy_test();
 
+#ifdef cf_agent2_metrics_custom
 void print_metrics(uint8_t options);
 void enable_metrics();
 uint64_t metrics_timer_start();
 uint64_t metrics_timer_stop();
 void metrics_timer_init();
+#endif
 
 #ifdef __cplusplus
 }

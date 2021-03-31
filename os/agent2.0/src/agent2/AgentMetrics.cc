@@ -83,8 +83,11 @@ void AgentMetrics::new_cluster(int tile)
   hw::hal::Atomic::addFetch(cluster_address, 1);
   clusters[tile] = 1;
   locker.unlock();
+}
 
-  printf("NEW CLUSTER ON TILE = %d\n", tile);
+void AgentMetrics::enable_metrics()
+{
+  AgentMetricsPrinter::enable_metrics();
 }
 
 void AgentMetrics::metrics_timer_init()
@@ -117,9 +120,9 @@ void AgentMetrics::print_metrics(uint8_t &options)
 
   time = stop_timer - start_timer;
 
-  for (int i = 0; i < 4; ++i)
-  {
-    printf("CLUSTER ARRAY [%d] = %d\n", i, cluster_arr[i]);
-  }
-  AgentMetricsPrinter::basic_print(metric_buffer, buffer_size, options, clusters, time);
+  // for (int i = 0; i < 4; ++i)
+  // {
+  //   printf("CLUSTER ARRAY [%d] = %d\n", i, cluster_arr[i]);
+  // }
+  AgentMetricsPrinter::basic_print(metric_buffer, buffer_size, options, time, cluster_arr);
 }

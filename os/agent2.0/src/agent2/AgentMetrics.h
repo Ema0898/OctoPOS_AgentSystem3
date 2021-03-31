@@ -31,6 +31,7 @@ namespace os
             static uint64_t metrics_timer_start();
             static uint64_t metrics_timer_stop();
             static void print_metrics(uint8_t &options);
+            static void enable_metrics();
         };
     } // namespace agent2
 } // namespace os

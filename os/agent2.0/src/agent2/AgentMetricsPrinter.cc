@@ -13,7 +13,7 @@ void AgentMetricsPrinter::enable_metrics()
   enabled = 1;
 }
 
-void AgentMetricsPrinter::basic_print(SerializationBuffer &metric_buffer, uint32_t &buffer_size, uint8_t &options, const int &clusters, const uint64_t &time)
+void AgentMetricsPrinter::basic_print(SerializationBuffer &metric_buffer, uint32_t &buffer_size, uint8_t &options, const uint64_t &time, const int *cluster_arr)
 {
 
   if (!enabled)
@@ -63,8 +63,15 @@ void AgentMetricsPrinter::basic_print(SerializationBuffer &metric_buffer, uint32
     }
   }
 
-  printf("------------------------------------------\n");
-  printf("Started clusters %d \n", clusters);
+  printf("---------------Clusters-------------------\n");
+  
+  for (int i = 0; i < hw::hal::Tile::getTileCount(); ++i)
+  {
+    // printf("Agent %d is %s\n ", i, cluster_arr[i] == 1 ? "Active" : "Not Active");
+    printf("Agent %d is marked as %s \n", i, cluster_arr[i] == 1 ? "Active" : "Not Active");
+  }
+
+  printf("-----------------Time---------------------\n");
   printf("Execution Time %ld cycles\n", time);
   printf("------------------------------------------\n");
 }

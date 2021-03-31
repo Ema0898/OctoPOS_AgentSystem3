@@ -3,8 +3,10 @@
 #include "os/rpc/RPCStub.h"
 #include "CommInterface.h"
 #include "config.h"
+
+#ifdef cf_agent2_metrics_custom
 #include "AgentMetrics.h"
-#include "AgentMetricsPrinter.h"
+#endif
 
 #ifdef cf_gui_enabled
 #include "os/dev/HWInfo.h"
@@ -322,6 +324,8 @@ void AgentInterface::_release_proxy_claim(CI<Agent> *agent_ci, ClaimID claim_id,
 	fut.force();
 }
 
+#ifdef cf_agent2_metrics_custom
+
 void AgentInterface::print_metrics_interface(uint8_t options)
 {
 	AgentMetrics::print_metrics(options);
@@ -329,7 +333,7 @@ void AgentInterface::print_metrics_interface(uint8_t options)
 
 void AgentInterface::enable_metrics_interface()
 {
-	AgentMetricsPrinter::enable_metrics();
+	AgentMetrics::enable_metrics();
 }
 
 void AgentInterface::metrics_timer_init_interface()
@@ -346,6 +350,8 @@ uint64_t AgentInterface::metrics_timer_stop_interface()
 {
 	return AgentMetrics::metrics_timer_stop();
 }
+
+#endif
 
 // bool AgentInterface::_migrate_agent(CI<Agent> *agent_ci, TID dest){
 // 	AgentID aid = agent_ci->get_instance_identifier();

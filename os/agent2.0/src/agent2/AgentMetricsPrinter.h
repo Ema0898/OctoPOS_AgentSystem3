@@ -15,7 +15,7 @@ namespace os
       static int enabled;
 
     public:
-      static void basic_print(SerializationBuffer &metric_buffer, uint32_t &buffer_size, uint8_t &options, const int &clusters, const uint64_t &time);
+      static void basic_print(SerializationBuffer &metric_buffer, uint32_t &buffer_size, uint8_t &options, const uint64_t &time, const int *cluster);
       static void enable_metrics();
     };
   } // namespace agent2

@@ -50,6 +50,8 @@ namespace os
 
 			static void print_proxy_claims(CI<Agent> *agent_ci);
 
+			#ifdef cf_agent2_metrics_custom
+
 			static void print_metrics_interface(uint8_t options);
 
 			static void enable_metrics_interface();
@@ -59,6 +61,8 @@ namespace os
 			static uint64_t metrics_timer_stop_interface();
 
 			static void metrics_timer_init_interface();
+
+			#endif
 
 		private:
 			static void _print_claim(CI<Agent> *agent_ci, ClaimID claim_id);

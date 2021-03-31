@@ -7,7 +7,10 @@
 #include "lib/debug.h"
 #include "os/rpc/RPCStub.h"
 #include "AgentMemory.h"
+
+#ifdef cf_agent2_metrics_custom
 #include "AgentMetrics.h"
+#endif
 
 #include <stdio.h>
 
@@ -20,11 +23,13 @@ AgentClusterManager::AgentClusterManager(void) : m_TileID(hw::hal::Tile::getTile
 	m_is_active = is_running_on_a_cluster_Tile();
 	DBG_RAW(SUB_AGENT, "AgentClusterManager was started on Tile %d. it is marked  as %s\n", m_TileID, m_is_active ? "[ACTIVE]" : "[NOT ACTIVE]");
 
+	#ifdef cf_agent2_metrics_custom
 	// AgentMetrics::new_cluster(hw::hal::Tile::getTileID());
 	if (m_is_active)
 	{
 		AgentMetrics::new_cluster(hw::hal::Tile::getTileID());
 	}
+	#endif
 }
 
 AgentClusterManager::~AgentClusterManager()
