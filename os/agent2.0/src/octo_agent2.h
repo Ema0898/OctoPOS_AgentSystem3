@@ -545,11 +545,15 @@ void agent_print_system_resources(void);
 proxy_claim_t get_proxy_test();
 
 #ifdef cf_agent2_metrics_custom
-void print_metrics(uint8_t options);
 void enable_metrics();
 uint64_t metrics_timer_start();
 uint64_t metrics_timer_stop();
 void metrics_timer_init();
+void print_general_metrics(uint8_t options);
+void print_clusters_information();
+void print_timer_value();
+void print_claim_resources(agentclaim_t claim);
+void print_metrics(agentclaim_t claim, uint8_t options);
 #endif
 
 #ifdef __cplusplus

@@ -326,11 +326,6 @@ void AgentInterface::_release_proxy_claim(CI<Agent> *agent_ci, ClaimID claim_id,
 
 #ifdef cf_agent2_metrics_custom
 
-void AgentInterface::print_metrics_interface(uint8_t options)
-{
-	AgentMetrics::print_metrics(options);
-}
-
 void AgentInterface::enable_metrics_interface()
 {
 	AgentMetrics::enable_metrics();
@@ -349,6 +344,37 @@ uint64_t AgentInterface::metrics_timer_start_interface()
 uint64_t AgentInterface::metrics_timer_stop_interface()
 {
 	return AgentMetrics::metrics_timer_stop();
+}
+
+void AgentInterface::general_metrics_interface(uint8_t options)
+{
+	AgentMetrics::general_metrics(options);
+}
+
+void AgentInterface::cluster_metrics_interface()
+{
+	AgentMetrics::cluster_metrics();
+}
+
+void AgentInterface::timer_metrics_interface()
+{
+	AgentMetrics::timer_metrics();
+}
+
+void AgentInterface::claim_metrics_interface(CI<Agent> *agent_ci, ClaimID claim_id)
+{
+	AgentID aid = agent_ci->get_instance_identifier();
+	Agent *ag = LocalAgentTileManager->get_agent(aid);
+
+	AgentMetrics::claim_metrics(*ag, claim_id);
+}
+
+void AgentInterface::all_metrics_interface(CI<Agent> *agent_ci, ClaimID claim_id, uint8_t options)
+{
+	AgentID aid = agent_ci->get_instance_identifier();
+	Agent *ag = LocalAgentTileManager->get_agent(aid);
+
+	AgentMetrics::print_metrics(*ag, claim_id, options);
 }
 
 #endif

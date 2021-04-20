@@ -52,8 +52,6 @@ namespace os
 
 			#ifdef cf_agent2_metrics_custom
 
-			static void print_metrics_interface(uint8_t options);
-
 			static void enable_metrics_interface();
 
 			static uint64_t metrics_timer_start_interface();
@@ -61,6 +59,16 @@ namespace os
 			static uint64_t metrics_timer_stop_interface();
 
 			static void metrics_timer_init_interface();
+
+			static void general_metrics_interface(uint8_t options);
+
+			static void cluster_metrics_interface();
+
+			static void timer_metrics_interface();
+
+			static void claim_metrics_interface(CI<Agent> *agent_ci, ClaimID claim_id);
+
+			static void all_metrics_interface(CI<Agent> *agent_ci, ClaimID claim_id, uint8_t options);
 
 			#endif
 

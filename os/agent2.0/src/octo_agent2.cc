@@ -511,11 +511,6 @@ agentclaim_t agent_claim_get_initial(claim_t octoclaim) {
 }
 
 #ifdef cf_agent2_metrics_custom
-void print_metrics(uint8_t options)
-{
-	AgentInterface::print_metrics_interface(options);
-}
-
 void enable_metrics()
 {
     AgentInterface::enable_metrics_interface();
@@ -534,6 +529,37 @@ uint64_t metrics_timer_stop()
 void metrics_timer_init()
 {
     return AgentInterface::metrics_timer_init_interface();
+}
+
+void print_general_metrics(uint8_t options)
+{
+	AgentInterface::general_metrics_interface(options);
+}
+
+void print_clusters_information()
+{
+    AgentInterface::cluster_metrics_interface();
+}
+
+void print_timer_value()
+{
+    AgentInterface::timer_metrics_interface();
+}
+
+void print_claim_resources(agentclaim_t claim)
+{
+    CI<AgentClaim> *ci = static_cast<CI<AgentClaim>*>(claim);
+	CI<Agent> *cia = ci->get_agent_ci();
+	ClaimID cic = ci->get_instance_identifier();
+	AgentInterface::claim_metrics_interface(cia, cic);
+}
+
+void print_metrics(agentclaim_t claim, uint8_t options)
+{
+    CI<AgentClaim> *ci = static_cast<CI<AgentClaim>*>(claim);
+	CI<Agent> *cia = ci->get_agent_ci();
+	ClaimID cic = ci->get_instance_identifier();
+	AgentInterface::all_metrics_interface(cia, cic, options);
 }
 
 #endif
