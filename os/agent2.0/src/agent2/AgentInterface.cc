@@ -14,6 +14,8 @@
 #include "MetricNewAgent.h"
 #include "MetricSystemArchitecture.h"
 
+#include <stdio.h>
+
 extern AgentTileManager *LocalAgentTileManager;
 static bool initMetric = false;
 #endif

@@ -185,7 +185,7 @@ void AgentMetrics::claim_metrics(Agent &agent, const ClaimID &id)
     {
       if ((*it).value.res_info[i].get_claimed())
       {
-        claim_arr[(*it).key * os::dev::HWInfo::Inst().getCoreCount() + i] = 15;
+        claim_arr[(*it).key * os::dev::HWInfo::Inst().getCoreCount() + i] = id;
         used_cores++;
       }
 		}

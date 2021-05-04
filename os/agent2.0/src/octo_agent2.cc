@@ -511,10 +511,11 @@ agentclaim_t agent_claim_get_initial(claim_t octoclaim) {
 }
 
 #ifdef cf_agent2_metrics_custom
+
 void enable_metrics()
 {
     AgentInterface::enable_metrics_interface();
-}  
+}
 
 uint64_t metrics_timer_start()
 {
@@ -528,7 +529,7 @@ uint64_t metrics_timer_stop()
 
 void metrics_timer_init()
 {
-    return AgentInterface::metrics_timer_init_interface();
+    AgentInterface::metrics_timer_init_interface();
 }
 
 void print_general_metrics(uint8_t options)

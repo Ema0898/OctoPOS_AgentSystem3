@@ -48,6 +48,7 @@ void AgentMetricsPrinter::print_general_metrics(SerializationBuffer &metric_buff
 
   printf("---------------------------------------------------------\n");
 }
+
 void AgentMetricsPrinter::print_cluster_metrics(const int *clusters)
 {
   printf("---------------Clusters-------------------\n");
@@ -82,13 +83,13 @@ void AgentMetricsPrinter::print_claim_metrics(const int *claim, const int &used_
   printf("\t ");
   for (int i = 0; i < os::dev::HWInfo::Inst().getCoreCount(); ++i)
   {
-    printf("Core #%d ", i);
+    printf("CPU %d   ", i);
   }
   printf("\n");
 
   for (int i = 0; i < hw::hal::Tile::getTileCount(); ++i)
   {
-    printf("Tile #%d    ", i);
+    printf("Tile %d   ", i);
     for (int j = 0; j < os::dev::HWInfo::Inst().getCoreCount(); ++j)
     {
       printf("%d\t   ", claim[i * os::dev::HWInfo::Inst().getCoreCount() + j]);
