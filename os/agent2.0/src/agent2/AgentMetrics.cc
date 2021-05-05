@@ -122,7 +122,11 @@ void AgentMetrics::general_metrics(uint8_t &options)
   if (!metrics_enabled)
     return;
 
+  locker.lock();
+
   AgentMetricsPrinter::print_general_metrics(metric_buffer, buffer_size, options);
+
+  locker.unlock();
 }
 
 void AgentMetrics::cluster_metrics()
@@ -143,7 +147,11 @@ void AgentMetrics::cluster_metrics()
     counter += 2;
   }
 
+  locker.lock();
+
   AgentMetricsPrinter::print_cluster_metrics(clusters);
+
+  locker.unlock();
 }
 
 void AgentMetrics::timer_metrics()
@@ -160,7 +168,11 @@ void AgentMetrics::timer_metrics()
 
   time = stop_timer - start_timer;
 
+  locker.lock();
+
   AgentMetricsPrinter::print_timer_metrics(time);
+
+  locker.unlock();
 }
 
 void AgentMetrics::claim_metrics(Agent &agent, const ClaimID &id)
@@ -192,7 +204,11 @@ void AgentMetrics::claim_metrics(Agent &agent, const ClaimID &id)
 		++it;
 	}
 
+  locker.lock();
+
   AgentMetricsPrinter::print_claim_metrics(claim_arr, used_cores);
+
+  locker.unlock();
 }
 
 
