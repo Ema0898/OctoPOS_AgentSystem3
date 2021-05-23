@@ -510,6 +510,8 @@ agentclaim_t agent_claim_get_initial(claim_t octoclaim) {
 	return agent_claim_invade(NULL, constr);
 }
 
+/**** Metrics functions ****/
+
 #ifdef cf_agent2_metrics_custom
 
 void enable_metrics()

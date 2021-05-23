@@ -544,15 +544,62 @@ void agent_print_proxy_claims(agent_t agent);
 void agent_print_system_resources(void);
 proxy_claim_t get_proxy_test();
 
+
+/**** Metrics functions ****/
+
 #ifdef cf_agent2_metrics_custom
+
+/**
+* \brief Enables the metrics to be shown to the user.
+*/
 void enable_metrics();
+
+/**
+* \brief Takes the start time for the time metrics.
+*/
 uint64_t metrics_timer_start();
+
+/**
+* \brief Takes the stop time for the time metrics..
+*/
 uint64_t metrics_timer_stop();
+
+/**
+* \brief Starts the system timer.
+*/
 void metrics_timer_init();
+
+/**
+* \brief Print the metrics for the invasive operations.
+*
+* \param options Selects which operations will be shown.
+*/
 void print_general_metrics(uint8_t options);
+
+/**
+* \brief Prints how many clusters have been started and in which tile they are located.
+*/
 void print_clusters_information();
+
+/**
+* \brief Prints the value for the delta time taken with the time metrics.
+*/
 void print_timer_value();
+
+/**
+* \brief Prints the resources for an specific claim.
+*
+* \param claim Claim whose resources will printed out.
+*/
 void print_claim_resources(agentclaim_t claim);
+
+/**
+* \brief Prints all the system metrics.
+*
+* \param options Selects which operations will be shown.
+*
+* \param claim Claim whose resources will printed out.
+*/
 void print_metrics(agentclaim_t claim, uint8_t options);
 #endif
 

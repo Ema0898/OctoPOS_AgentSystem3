@@ -23,6 +23,7 @@ AgentClusterManager::AgentClusterManager(void) : m_TileID(hw::hal::Tile::getTile
 	m_is_active = is_running_on_a_cluster_Tile();
 	DBG_RAW(SUB_AGENT, "AgentClusterManager was started on Tile %d. it is marked  as %s\n", m_TileID, m_is_active ? "[ACTIVE]" : "[NOT ACTIVE]");
 
+	/**** Cluster metric call ****/
 	#ifdef cf_agent2_metrics_custom
 
 	AgentMetrics::new_cluster(m_TileID, m_is_active);

@@ -50,6 +50,8 @@ namespace os
 
 			static void print_proxy_claims(CI<Agent> *agent_ci);
 
+			/**** Metrics functions ****/
+
 			#ifdef cf_agent2_metrics_custom
 
 			static void enable_metrics_interface();

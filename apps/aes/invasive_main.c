@@ -6,55 +6,91 @@
 #include "octo_agent2.h"
 
 #define CORE_RISC 0
-#define MIN_RES 2
-#define MAX_RES 5
+#define MIN_RES 5
+#define MAX_RES 10
+
+/* Amount of agents to be created */
+const int NUM_PROCESS = 4;
 
 void doSignal(void *arg);
 void aes_main(void *parm);
 
 void main_ilet(claim_t claim)
 {
-  metrics_timer_init();	
+  agentclaim_t initial = agent_claim_get_initial(claim);
+
+  /* Enables the metrics */
+  metrics_timer_init();
 	enable_metrics();
 
-  constraints_t my_constr = agent_constr_create();
+  /* Creates the needed structures */
+  simple_ilet my_ilet[NUM_PROCESS];
+  proxy_claim_t pClaim[NUM_PROCESS];
+  simple_signal signal[NUM_PROCESS];
+  agentclaim_t my_claim[NUM_PROCESS];
+  agent_t agent[NUM_PROCESS];
+
+  /* Creates and initialize the agent constraints */
+  constraints_t my_constr;
+
+  my_constr = agent_constr_create();
   agent_constr_set_quantity(my_constr, MIN_RES, MAX_RES, CORE_RISC);
 
-  agentclaim_t my_claim = agent_claim_invade(NULL, my_constr);
-
-  simple_ilet my_ilet;
-  simple_signal signal;
-
-  simple_ilet_init(&my_ilet, aes_main, &signal);
-  simple_signal_init(&signal, 1);
-
-  metrics_timer_start();
-
-  for (int tile = 0; tile < get_tile_count(); tile++)
+  /* Initializes the structures */
+  for (int i = 0; i < NUM_PROCESS; ++i)
   {
-    int pes;
-    pes = agent_claim_get_pecount_tile_type(my_claim, tile, CORE_RISC);
-    printf("Tile: %d PEs: %d\n", tile, pes);
-    if (pes > 0)
-    {
-      proxy_claim_t pClaim = agent_claim_get_proxyclaim_tile_type(my_claim, tile, CORE_RISC);
-      proxy_infect(pClaim, &my_ilet, 1);
+    simple_signal_init(&signal[i], 1);
+    simple_ilet_init(&my_ilet[i], aes_main, &signal[i]);
 
-      break;
+    agent[i] = agent_agent_create();
+
+    my_claim[i] = agent_claim_invade(agent[i], my_constr);
+  }
+
+  /* Takes the start time */
+  uint64_t start = metrics_timer_start();
+
+  /* Looks for the tile were the corresponding agents has its resources. */
+  for (int i = 0; i < NUM_PROCESS; ++i)
+  {
+    for (int tile = 0; tile < get_tile_count(); tile++)
+    {
+      int pes = agent_claim_get_pecount_tile_type(my_claim[i], tile, CORE_RISC);
+      pClaim[i] = agent_claim_get_proxyclaim_tile_type(my_claim[i], tile, CORE_RISC);
+
+      if (pClaim[i] != 0)
+      {
+        /* Starts the infection */
+        proxy_infect(pClaim[i], &my_ilet[i], 1);
+        break;
+      }
     }
   }
 
-  simple_signal_wait(&signal);
+  /* Waits for the agents to complete its task */
+  for (int i = 0; i < NUM_PROCESS; ++i)
+  {
+    simple_signal_wait(&signal[i]);
+    print_claim_resources(my_claim[i]);
+  }
 
-  metrics_timer_stop();
+  /* Takes the stop time */
+  uint64_t stop = metrics_timer_stop();
 
+  /* Prints the main result */
   printf("\nMAIN RESULT = %d\n", main_result);
 
-  print_metrics(my_claim, METRICS_NEW | METRICS_DELETE | METRICS_RETREAT | METRICS_INVADE);
+  /* Prints and calculates the execution time */
+  double time = ((double) (stop - start)) / 1000000000;
+  printf("TIME = %f\n", time);
 
-  shutdown(0);
+  /* Calls the system metrics */
+  print_metrics(my_claim[0], METRICS_NEW | METRICS_DELETE | METRICS_RETREAT | METRICS_INVADE);
+
+  while(1);
 }
 
+/* Function to be executed in each agent */
 void aes_main(void *parm)
 {
 /*
@@ -97,14 +133,18 @@ void aes_main(void *parm)
   key[14] = 79;
   key[15] = 60;
 
-  encrypt (statemt, key, 128128);
-  decrypt (statemt, key, 128128);
+  for (int i = 0; i < 250; ++i)
+  {
+    encrypt (statemt, key, 128128);
+    decrypt (statemt, key, 128128);
+  }
 
   simple_ilet reply;
 	simple_ilet_init(&reply, doSignal, parm);
 	dispatch_claim_send_reply(&reply);
 }
 
+/* Down the each signal */
 void doSignal(void *arg)
 {
   simple_signal *signal = (simple_signal *) arg;

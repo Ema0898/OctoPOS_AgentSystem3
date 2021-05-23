@@ -2,9 +2,9 @@
 #define AGENT_METRICS_PRINTER
 
 #include "AgentSerialization.h"
-
 #include <stdint.h>
 
+/* Class to print system metrics */
 namespace os
 {
   namespace agent2

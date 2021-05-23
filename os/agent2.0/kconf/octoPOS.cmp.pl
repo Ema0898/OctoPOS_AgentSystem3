@@ -1334,10 +1334,21 @@ $VAR1 = {
 						'HashMap.h',
 						'OperatingPoint.cc',
 						'OperatingPoint.h',
-						'AgentLRUCache.h',
-						'AgentMetrics.h',
-						'AgentMetrics.cc',
+						'AgentLRUCache.h',				
+						
 					],
+				},
+				{
+                    'vname' => 'Agent System 2.0 Custom Metrics',
+					'name' => 'os_agent2_metrics_impl',
+					'depends' => '&os_agent2_support && &cf_agent2_metrics_custom',
+					'files' => [
+                        'AgentMetrics.h',
+						'AgentMetrics.cc',
+						'AgentMetricsPrinter.h',
+						'AgentMetricsPrinter.cc',
+						'MetricsEnum.h'
+					]
 				},
 				{
 					'vname' => 'LibKit Header',

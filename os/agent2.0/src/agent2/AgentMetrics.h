@@ -9,7 +9,7 @@
 
 #include <stdint.h>
 
-/* Class to print system metrics */
+/* Class to process the system metrics */
 namespace os
 {
     namespace agent2

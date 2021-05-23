@@ -15,15 +15,15 @@ using namespace os::agent2;
 
 SerializationBuffer AgentMetrics::metric_buffer; /* Buffer to store the metrics */
 uint32_t AgentMetrics::buffer_size;              /* Keep track of the buffer size */
-uint64_t AgentMetrics::start_timer;
-uint64_t AgentMetrics::stop_timer;
+uint64_t AgentMetrics::start_timer;              /* Stores the start time */
+uint64_t AgentMetrics::stop_timer;               /* Stores the stop time */
 
-SerializationBuffer AgentMetrics::cluster_buffer;
-uint32_t AgentMetrics::cluster_buffer_size;
+SerializationBuffer AgentMetrics::cluster_buffer; /* Buffer to store the metrics */
+uint32_t AgentMetrics::cluster_buffer_size;       /* Keep track of the cluster buffer size */
 
-lib::adt::SimpleSpinlock locker;
+lib::adt::SimpleSpinlock locker;                  /* Used to synchronize the prints */
 
-bool AgentMetrics::metrics_enabled = false;
+bool AgentMetrics::metrics_enabled = false;       /* Used to enable or disable the metrics */
 
 /* New agent is created. Stores the agent id in the buffer */
 void AgentMetrics::new_agent(const AgentID &agent_id)
@@ -37,7 +37,6 @@ void AgentMetrics::new_agent(const AgentID &agent_id)
 
   /* Increase buffer size */
   buffer_size += 2;
-  //printf("$$$ New Agent Created on Tile = %d $$$\n", hw::hal::Tile::getTileID());
 }
 
 /* Agent is deleted. Stores the agent id in the buffer */
@@ -49,7 +48,6 @@ void AgentMetrics::delete_agent(const AgentID &agent_id)
   SerializableAgent::serialize_element<uint32_t>(metric_buffer, agentID, SIZE_BYTE);
 
   buffer_size += 2;
-  //printf("$$$ Agent Deleted on Tile = %d $$$\n", hw::hal::Tile::getTileID());
 }
 
 /* Agent made an invasion. Stores the agent id and the claim in the buffer */
@@ -62,7 +60,6 @@ void AgentMetrics::invade_agent(const AgentID &agent_id, const ClaimID &claim_id
   SerializableAgent::serialize_element<uint32_t>(metric_buffer, claim_id, SIZE_BYTE);
 
   buffer_size += 3;
-  //printf("$$$ Agent made Invasion on Tile = %d $$$\n", hw::hal::Tile::getTileID());
 }
 
 /* Agent made a retreat. Stores the agent id and the claim in the buffer */
@@ -75,48 +72,52 @@ void AgentMetrics::retreat_agent(const AgentID &agent_id, const ClaimID &claim_i
   SerializableAgent::serialize_element<uint32_t>(metric_buffer, claim_id, SIZE_BYTE);
 
   buffer_size += 3;
-  //printf("$$$ Agent made a Retreat on Tile = %d $$$\n", hw::hal::Tile::getTileID());
 }
 
+/* New cluster has been created. Stores the cluster and its state in the buffer */
 void AgentMetrics::new_cluster(const int &tile, const int &enabled)
 {
   locker.lock();
 
+  /* Takes the memory address for the buffer on remote tiles */
   SerializationBuffer *buffer = hw::hal::Tile::onRemoteTile(&cluster_buffer, 0);
   uint32_t *clusters_size = hw::hal::Tile::onRemoteTile(&cluster_buffer_size, 0);
 
   SerializableAgent::serialize_element<uint32_t>(*buffer, tile, SIZE_BYTE);
   SerializableAgent::serialize_element<uint32_t>(*buffer, enabled, SIZE_BYTE);
 
-  //hw::hal::Atomic::addFetch(clusters_size, 2);
   *clusters_size += 2;
 
   locker.unlock();
 }
 
+/* Enables the metrics */
 void AgentMetrics::enable_metrics()
 {
   metrics_enabled = true;
 }
 
+/* Initializes the system timer */
 void AgentMetrics::metrics_timer_init()
 {
   hw::dev::TSCDeadlineTimer::init();
 }
 
+/* Starts the timer, stores its value to calculate the delta time. Also returns the timer value*/
 uint64_t AgentMetrics::metrics_timer_start()
 {
-  //hw::dev::TSCDeadlineTimer::init();
   start_timer = uint64_t(hw::dev::TSCDeadlineTimer::getCyclesStart());
   return start_timer;
 }
 
+/* Stops the timer, stores its value to calculate the delta time. Also returns the timer value*/
 uint64_t AgentMetrics::metrics_timer_stop()
 {
   stop_timer = uint64_t(hw::dev::TSCDeadlineTimer::getCyclesStop());
   return stop_timer;
 }
 
+/* Calls the function to print the operation metrics */
 void AgentMetrics::general_metrics(uint8_t &options)
 {
   if (!metrics_enabled)
@@ -129,6 +130,7 @@ void AgentMetrics::general_metrics(uint8_t &options)
   locker.unlock();
 }
 
+/* Takes the information in the cluster buffer to process its information and calls the function to print it */
 void AgentMetrics::cluster_metrics()
 {
   if (!metrics_enabled)
@@ -154,6 +156,7 @@ void AgentMetrics::cluster_metrics()
   locker.unlock();
 }
 
+/* Calculates the delta time using the stored values */
 void AgentMetrics::timer_metrics()
 {
   if (!metrics_enabled)
@@ -175,6 +178,7 @@ void AgentMetrics::timer_metrics()
   locker.unlock();
 }
 
+/* Takes and agent and its id to retrieve its resources. */
 void AgentMetrics::claim_metrics(Agent &agent, const ClaimID &id)
 {
   if (!metrics_enabled)
@@ -212,7 +216,7 @@ void AgentMetrics::claim_metrics(Agent &agent, const ClaimID &id)
 }
 
 
-/* Prints the data which is inside the buffer. */
+/* Calls all the system to be printed out. */
 void AgentMetrics::print_metrics(Agent &agent, const ClaimID &id, uint8_t &options)
 {
   general_metrics(options);

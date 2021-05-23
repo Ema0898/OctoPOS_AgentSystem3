@@ -6,6 +6,7 @@
 
 using namespace os::agent2;
 
+/* Prints the data which is inside the buffer. */
 void AgentMetricsPrinter::print_general_metrics(SerializationBuffer &metric_buffer, uint32_t &buffer_size, uint8_t &options)
 {
   METRICS buffer_value;
@@ -49,6 +50,7 @@ void AgentMetricsPrinter::print_general_metrics(SerializationBuffer &metric_buff
   printf("---------------------------------------------------------\n");
 }
 
+/* Prints the clusters and its status */
 void AgentMetricsPrinter::print_cluster_metrics(const int *clusters)
 {
   printf("---------------Clusters-------------------\n");
@@ -61,6 +63,7 @@ void AgentMetricsPrinter::print_cluster_metrics(const int *clusters)
   printf("------------------------------------------\n");
 }
 
+/* Prints the delta time */
 void AgentMetricsPrinter::print_timer_metrics(const uint64_t &time)
 {
   printf("-----------------Time---------------------\n");
@@ -75,6 +78,7 @@ void AgentMetricsPrinter::print_timer_metrics(const uint64_t &time)
   printf("------------------------------------------\n");
 }
 
+/* Prints the resources for a specific claim. */
 void AgentMetricsPrinter::print_claim_metrics(const int *claim, const int &used_cores)
 {
   int totalCores = hw::hal::Tile::getTileCount() * os::dev::HWInfo::Inst().getCoreCount();

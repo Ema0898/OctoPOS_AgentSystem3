@@ -326,6 +326,8 @@ void AgentInterface::_release_proxy_claim(CI<Agent> *agent_ci, ClaimID claim_id,
 	fut.force();
 }
 
+/**** Metrics functions ****/
+
 #ifdef cf_agent2_metrics_custom
 
 void AgentInterface::enable_metrics_interface()
@@ -365,6 +367,7 @@ void AgentInterface::timer_metrics_interface()
 
 void AgentInterface::claim_metrics_interface(CI<Agent> *agent_ci, ClaimID claim_id)
 {
+	// Takes the agent and its id to retrieve its resources.
 	AgentID aid = agent_ci->get_instance_identifier();
 	Agent *ag = LocalAgentTileManager->get_agent(aid);
 
@@ -373,6 +376,7 @@ void AgentInterface::claim_metrics_interface(CI<Agent> *agent_ci, ClaimID claim_
 
 void AgentInterface::all_metrics_interface(CI<Agent> *agent_ci, ClaimID claim_id, uint8_t options)
 {
+	// Takes the agent and its id to retrieve its resources.
 	AgentID aid = agent_ci->get_instance_identifier();
 	Agent *ag = LocalAgentTileManager->get_agent(aid);
 
