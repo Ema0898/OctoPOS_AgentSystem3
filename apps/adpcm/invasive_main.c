@@ -946,7 +946,7 @@ void invasive_adpcm_main(void *parm)
   int main_result = 0;
   int i;
 
-  for (int j = 0; j < 333; ++j)
+  for (int j = 0; j < 250; ++j)
   {
     adpcm_main();
   }

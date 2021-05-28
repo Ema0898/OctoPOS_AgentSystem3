@@ -94,7 +94,7 @@ void sha_main(void *parm)
   const INT32 outData[5] =
   { 0x006a5a37UL, 0x93dc9485UL, 0x2c412112UL, 0x63f7ba43UL, 0xad73f922UL };
 
-  for (int i = 0; i < 333; ++i)
+  for (int i = 0; i < 250; ++i)
   {
     sha_stream();
   }
